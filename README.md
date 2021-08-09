@@ -11,13 +11,9 @@ We conduct our experiments on the following environments:
 
 ```
 python 3.6
-
 CUDA: 9.0
-
 GPU: Tesla T4
-
 pytorch == 1.1.0
-
 transformers == 4.9.1
 ```
 
@@ -43,11 +39,11 @@ python pre_cascading.py
 2. Train/Dev/Test the model: Run as follows to train/dev/test the model:
 
 ```
-CUDA_VISIBLE_DEVICES=0 nohup python -u main.py --output_model_path ./models_save/model.bin --do_train True --do_eval True --do_test True >logs/model.log &
+CUDA_VISIBLE_DEVICES=0 nohup python -u main.py --output_model_path ./models_save/model.bin --do_train True --do_eval True --do_test True > logs/model.log &
 ```
 
 The hyper-parameters are recorded in ``/utils/params.py``. 
-We adopt ``bert-base-chinese`` as our pretrained language model. For extention, you could also try other hyper-parameters for even better performance.
+We adopt ``bert-base-chinese`` as our pretrained language model. For extention, you could also try further hyper-parameters for even better performance.
 
 # Citation
 
@@ -74,6 +70,4 @@ If you find this code useful, please cite our work:
     pages = "164--174",
 }
 ```
-
-
 
