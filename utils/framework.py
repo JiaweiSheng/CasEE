@@ -48,7 +48,7 @@ class Framework(object):
 
         if torch.cuda.device_count() > 1:
             print("{} GPUs are available. Let's use them.".format(torch.cuda.device_count()))
-            model = torch.nn.DataParallel(model)
+            self.model = torch.nn.DataParallel(model)
 
         return scheduler, optimizer
 
@@ -109,12 +109,7 @@ class Framework(object):
             c_ps, c_rs, c_fs, t_ps, t_rs, t_fs, a_ps, a_rs, a_fs = self.evaluate_with_oracle(self.config, self.model, dev_loader, self.config.device, self.config.ty_args_id, self.config.id_type)
             f1_mean_all = (c_fs + t_fs + a_fs) / 3
             print('Evaluate on all types:')
-            print("Epoch id: {}, Type P: {:.3f}, Type R: {:.3f}, Type F: {:.3f}".format(
-                epoch,
-                c_ps,
-                c_rs,
-                c_fs,
-            ))
+            print("Epoch id: {}, Type P: {:.3f}, Type R: {:.3f}, Type F: {:.3f}".format(epoch, c_ps, c_rs, c_fs))
             print("Epoch id: {}, Trigger P: {:.3f}, Trigger R: {:.3f}, Trigger F: {:.3f}".format(epoch, t_ps, t_rs, t_fs))
             print("Epoch id: {}, Args P: {:.3f}, Args R: {:.3f}, Args F: {:.3f}".format(epoch, a_ps, a_rs, a_fs))
             print("Epoch id: {}, F1 Mean All: {:.3f}".format(epoch, f1_mean_all))

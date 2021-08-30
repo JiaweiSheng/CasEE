@@ -5,7 +5,7 @@ class TypeCls(nn.Module):
     def __init__(self, config):
         super(TypeCls, self).__init__()
         self.type_emb = nn.Embedding(config.type_num, config.hidden_size)
-        self.type_indices = torch.arange(0, config.type_num, 1).long().to(config.device)
+        self.register_buffer('type_indices', torch.arange(0, config.type_num, 1).long())
         self.dropout = nn.Dropout(config.decoder_dropout)
 
         self.config = config
