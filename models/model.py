@@ -135,12 +135,12 @@ class CasEE(nn.Module):
         :param tokens: [b, t]
         :param segment: [b, t]
         :param mask: [b, t], 0 if masked
-        :param trigger_s: [b, t-4]
-        :param trigger_e: [b, t-4]
+        :param trigger_s: [b, t]
+        :param trigger_e: [b, t]
         :param relative_pos:
         :param trigger_mask: [0000011000000]
-        :param args_s: [b, l, t-4]
-        :param args_e: [b, l, t-4]
+        :param args_s: [b, l, t]
+        :param args_e: [b, l, t]
         :param args_m: [b, k]
         :return:
         '''
