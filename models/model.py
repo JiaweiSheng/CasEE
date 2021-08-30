@@ -76,9 +76,9 @@ class ArgsRec(nn.Module):
     def forward(self, text_emb, relative_pos, trigger_mask, mask, type_emb):
         '''
         :param query_emb: [b, 4, e]
-        :param text_emb: [b, t-4, e]
-        :param relative_pos: [b, t-4, e]
-        :param trigger_mask: [b, t-4]
+        :param text_emb: [b, t, e]
+        :param relative_pos: [b, t, e]
+        :param trigger_mask: [b, t]
         :param mask:
         :param type_emb: [b, e]
         :return:  [b, t, a], []
