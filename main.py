@@ -90,9 +90,8 @@ def main():
         metric_names = ['TI', 'TC', 'AI', 'AC']
         for i, prf in enumerate(prf_s):
             print('{}: P:{:.1f}, R:{:.1f}, F:{:.1f}'.format(metric_names[i], prf[0] * 100, prf[1] * 100, prf[2] * 100))
-        if not os.path.exists(config.output_result_path):
-            os.makedirs(config.output_result_path)
-        write_jsonl(pred_records, config.results_output)
+
+        write_jsonl(pred_records, config.output_result_path)
 
 
 if __name__ == '__main__':

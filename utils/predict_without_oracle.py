@@ -70,7 +70,7 @@ def extract_all_items_without_oracle(model, device, idx, content: str, token, se
 
             type_name = id_type[type_pred_one]
             pred_event_one = {'type': type_name}
-            pred_trigger = {'span': [int(span[0]), int(span[1]) + 1], 'word': content[int(span[0]):int(span[1]) + 1]}
+            pred_trigger = {'span': [int(span[0]) - 1, int(span[1]) + 1 - 1], 'word': content[int(span[0]) - 1:int(span[1]) + 1 - 1]}  # remove <CLS> token
             pred_event_one['trigger'] = pred_trigger
             pred_args = {}
 
@@ -84,7 +84,7 @@ def extract_all_items_without_oracle(model, device, idx, content: str, token, se
                     if len(es) > 0:
                         e = es[0]
                         if e - j + 1 <= args_len_dict[i]:
-                            pred_arg = {'span': [int(j), int(e) + 1], 'word': content[int(j):int(e) + 1]}
+                            pred_arg = {'span': [int(j) - 1, int(e) + 1 - 1], 'word': content[int(j) - 1:int(e) + 1 - 1]}  # remove <CLS> token
                             pred_args[id_args[i]].append(pred_arg)
 
             pred_event_one['args'] = pred_args

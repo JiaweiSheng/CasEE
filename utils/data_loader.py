@@ -204,6 +204,8 @@ class Data(Dataset):
             # default uncased
             data_content = [token.lower() for token in data_content]
             data_content = list(data_content)
+            # Here we add <CLS> and <SEP> token for BERT input
+            # transformers == 4.9.1
             inputs = self.tokenizer.encode_plus(data_content, add_special_tokens=True, max_length=self.seq_len, truncation=True, padding='max_length')
             tokens, segs, masks = inputs["input_ids"], inputs["token_type_ids"], inputs['attention_mask']
             tokens_ids.append(tokens)
@@ -237,8 +239,9 @@ class Data(Dataset):
             t_e = [0] * self.seq_len
 
             for t in data_trigger:
-                t_s[t[0]] = 1
-                t_e[t[1] - 1] = 1
+                # plus 1 for additional <CLS> token
+                t_s[t[0] + 1] = 1
+                t_e[t[1] + 1 - 1] = 1
 
             trigger_s.append(t_s)
             trigger_e.append(t_e)
@@ -261,8 +264,9 @@ class Data(Dataset):
                 e_r_i = self.args_e_id[args_name + '_e']
                 arg_mask[s_r_i] = 1
                 for span in data_args_dict[args_name]:
-                    args_s[s_r_i][span[0]] = 1
-                    args_e[e_r_i][span[1] - 1] = 1
+                    # plus 1 for additional <CLS> token
+                    args_s[s_r_i][span[0] + 1] = 1
+                    args_e[e_r_i][span[1] + 1 - 1] = 1
             args_s_lines.append(args_s)
             args_e_lines.append(args_e)
             arg_masks.append(arg_mask)
@@ -271,19 +275,20 @@ class Data(Dataset):
     def results_for_eval(self):
         '''
         read structured ground truth, for evaluating model performance
-        :return:
         '''
         triggers_truth_s = []
         args_truth_s = []
         for i in range(len(self.data_ids)):
             triggers = self.data_triggers[i]
             args = self.data_args[i]
-            triggers_truth = [(span[0], span[1] - 1) for span in triggers]
+            # plus 1 for additional <CLS> token
+            triggers_truth = [(span[0] + 1, span[1] + 1 - 1) for span in triggers]
             args_truth = {i: [] for i in range(self.args_num)}
             for args_name in args:
                 s_r_i = self.args_s_id[args_name + '_s']
                 for span in args[args_name]:
-                    args_truth[s_r_i].append((span[0], span[1] - 1))
+                    # plus 1 for additional <CLS> token
+                    args_truth[s_r_i].append((span[0] + 1, span[1] + 1 - 1))
             triggers_truth_s.append(triggers_truth)
             args_truth_s.append(args_truth)
         return triggers_truth_s, args_truth_s
@@ -300,9 +305,11 @@ class Data(Dataset):
             trigger = triggers[i]
             index = data_index[i]
             span = trigger[index]
-            pos = get_relative_pos(span[0], span[1] - 1, self.seq_len)
+            # plus 1 for additional <CLS> token
+            pos = get_relative_pos(span[0] + 1, span[1] + 1 - 1, self.seq_len)
             pos = [p + self.seq_len for p in pos]
-            mask = get_trigger_mask(span[0], span[1] - 1, self.seq_len)
+            # plus 1 for additional <CLS> token
+            mask = get_trigger_mask(span[0] + 1, span[1] + 1 - 1, self.seq_len)
             r_pos.append(pos)
             t_m.append(mask)
         return r_pos, t_m
